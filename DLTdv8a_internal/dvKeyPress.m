@@ -24,16 +24,22 @@ plocal=[(pl(1)-pos(1,1)+1)/pos(1,3), (pl(2)-pos(1,2)+1)/pos(1,4)];
 
 % if the keypress is empty or is a lower-case x, shut off the
 % auto-tracker
-if cc=='x'
+if (cc=='z' || cc=='x' || cc=='c' || cc=='v')
   app.drawVid(:)=true;
   
-  if autoT<4 % autotrack menu
-    app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{autoT+1};
-  else
-    app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{1};
-  end
+    % set the figure xlimit and ylimit
+    if cc=='z' % off
+      app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{1};
+    elseif cc=='x' % auto-advance
+      app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{2};
+    elseif cc=='c' %semi-track
+      app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{3};
+    elseif cc=='v' %semi-track
+      app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{4};
+    end
+
   return
-elseif cc=='X'
+elseif cc=='b'
   app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{5};
   return
 else % figure out what axis & video started the callback
@@ -103,7 +109,7 @@ if (cc=='=' || cc=='-' || cc=='r') && axh~=0
   end
   
   % check for valid movement keys
-elseif cc=='f' || cc=='b' || cc=='F' || cc=='B' || cc=='<' || cc=='>' && axh~=0
+elseif cc=='d' || cc=='s' || cc=='D' || cc=='S' || cc==',' || cc=='.' && axh~=0
   fr=round(app.FrameNumberSlider.Value); % get current slider value
   smax=app.FrameNumberSlider.Limits(2); % max slider value
   smin=app.FrameNumberSlider.Limits(1); % min slider value
@@ -116,33 +122,33 @@ elseif cc=='f' || cc=='b' || cc=='F' || cc=='B' || cc=='<' || cc=='>' && axh~=0
     return
   end
   cp=sp2full(app.xypts(fr,(axn*2-1:axn*2)+(sp-1)*2*app.nvid)); % set current point to xy value
-  if cc=='f' && fr+stepSize <= smax
+  if cc=='d' && fr+stepSize <= smax
     if (autoT==3 || autoT==5) && isfinite(cp(1)) % semi-auto tracking
       keyadvance=1; % set keyadvance variable for DLTautotrack function
       DLTautotrack3fun(app,app.handles,keyadvance,axn,cp,fr,sp);
     end
     app.FrameNumberSlider.Value=fr+stepSize; % forward stepSize frame
     fr=fr+1; 
-  elseif cc=='b' && fr-stepSize >= smin
+  elseif cc=='s' && fr-stepSize >= smin
     app.FrameNumberSlider.Value=fr-stepSize; % back stepSize frame
     fr=fr-1;
-  elseif cc=='F' && fr+bigStepSize < smax
+  elseif cc=='D' && fr+bigStepSize < smax
     app.FrameNumberSlider.Value=fr+bigStepSize; % current frame + bigStepSize
     fr=fr+bigStepSize;
-  elseif cc=='F' && fr+bigStepSize > smax
+  elseif cc=='D' && fr+bigStepSize > smax
     app.FrameNumberSlider.Value=smax; % set to last frame
     fr=smax;
-  elseif cc=='B' && fr-bigStepSize >= smin
+  elseif cc=='S' && fr-bigStepSize >= smin
     app.FrameNumberSlider.Value=fr-bigStepSize;% current frame - bigStepSize
     fr=fr-50;
-  elseif cc=='B' && fr-bigStepSize < smin
+  elseif cc=='S' && fr-bigStepSize < smin
     app.FrameNumberSlider.Value=smin; % set to first frame
     fr=smin;
-  elseif cc=='<' || cc=='>' % switch to start or end of this point in this camera
+  elseif cc==',' || cc=='.' % switch to start or end of this point in this camera
     ptval=app.sp; % selected point
     idx=find(app.xypts(:,vnum*2-1+(sp-1)*2*app.nvid)~=0);
     if numel(idx)>0
-      if cc=='<'
+      if cc==','
         app.FrameNumberSlider.Value=idx(1);
       else
         app.FrameNumberSlider.Value=idx(end);
@@ -159,7 +165,7 @@ elseif cc=='f' || cc=='b' || cc=='F' || cc=='B' || cc=='<' || cc=='>' && axh~=0
   cp=app.xypts(fr,(vnum*2-1:vnum*2)+(sp-1)*2*app.nvid);
   updateSmallPlot(app,app.handles,vnum,cp);
   
-elseif cc=='n' % add a new point
+elseif cc=='O' % add a new point
   yesNo=questdlg('Are you sure you want to add a point?',...
     'Add a point?','Yes','No','No');
   if strcmp(yesNo,'Yes')==1
@@ -169,12 +175,12 @@ elseif cc=='n' % add a new point
     return
   end
   
-elseif cc=='.' || cc==',' % change point
+elseif cc=='n' || cc=='m' % change point
   % get current pull-down list (available points)
   ptnum=numel(app.CurrentpointDropDown.Items); % number of points
-  if cc==',' && app.sp>1 % decrease point value if able
+  if cc=='n' && app.sp>1 % decrease point value if able
     app.sp=app.sp-1;
-  elseif cc=='.' && app.sp<ptnum % increase pt value if able
+  elseif cc=='m' && app.sp<ptnum % increase pt value if able
     app.sp=app.sp+1;
   else
     % do nothing
@@ -189,7 +195,7 @@ elseif cc=='.' || cc==',' % change point
   % do a quick screen redraw
   quickRedraw(app,app.handles,app.sp,fr);
   
-elseif cc=='i' || cc=='j' || cc=='k' || cc=='m' || cc=='4' || ...
+elseif cc=='k' || cc=='h' || cc=='l' || cc=='j' || cc=='4' || ...
     cc=='8' || cc=='6' || cc=='2' % nudge point
   % check and see if there is a point to nudge, get it's value if
   % possible
@@ -202,11 +208,11 @@ elseif cc=='i' || cc=='j' || cc=='k' || cc=='m' || cc=='4' || ...
   
   % modify pt based on the 'nudge' value
   nudge=0.5; % 1/2 pixel nudge
-  if cc=='i' || cc=='8'
+  if cc=='k' || cc=='8'
     pt(1,2)=pt(1,2)-nudge; % up
-  elseif cc=='j' || cc=='4'
+  elseif cc=='h' || cc=='4'
     pt(1,1)=pt(1,1)-nudge; % left
-  elseif cc=='k' || cc=='6'
+  elseif cc=='l' || cc=='6'
     pt(1,1)=pt(1,1)+nudge; % right
   else
     pt(1,2)=pt(1,2)+nudge; % down
@@ -292,7 +298,7 @@ elseif cc==' ' % space bar (digitize a point)
 
   return
   
-elseif cc=='z' % delete the current point
+elseif cc=='q' % delete the current point
 
   % create a simulated right-click
   event2=[];
@@ -321,7 +327,7 @@ elseif cc=='U' % undo prior whole-point delete/swap/split/join
     disp('Undo cancelled')
   end
   
-elseif cc=='D' % remove current point from the data array
+elseif cc=='P' % remove current point from the data array
   sp=app.sp; % store current selected point (will be deleted)
   if app.numpts==1
     beep
