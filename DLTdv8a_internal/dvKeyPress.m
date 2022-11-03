@@ -34,7 +34,7 @@ if (cc=='z' || cc=='x' || cc=='c' || cc=='v')
       app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{2};
     elseif cc=='c' %semi-track
       app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{3};
-    elseif cc=='v' %semi-track
+    elseif cc=='v' %autimatic
       app.AutotrackmodeDropDown.Value=app.AutotrackmodeDropDown.Items{4};
     end
 
@@ -175,12 +175,12 @@ elseif cc=='O' % add a new point
     return
   end
   
-elseif cc=='n' || cc=='m' % change point
+elseif cc=='n' || cc=='m' || cc=='N' || cc=='M'% change point
   % get current pull-down list (available points)
   ptnum=numel(app.CurrentpointDropDown.Items); % number of points
-  if cc=='n' && app.sp>1 % decrease point value if able
+  if (cc=='n'||cc=='N') && app.sp>1 % decrease point value if able
     app.sp=app.sp-1;
-  elseif cc=='m' && app.sp<ptnum % increase pt value if able
+  elseif (cc=='m'||cc=='M') && app.sp<ptnum % increase pt value if able
     app.sp=app.sp+1;
   else
     % do nothing
@@ -195,8 +195,9 @@ elseif cc=='n' || cc=='m' % change point
   % do a quick screen redraw
   quickRedraw(app,app.handles,app.sp,fr);
   
-elseif cc=='k' || cc=='h' || cc=='l' || cc=='j' || cc=='4' || ...
-    cc=='8' || cc=='6' || cc=='2' % nudge point
+elseif cc=='k' || cc=='h' || cc=='l' || cc=='j' || ...
+       cc=='K' || cc=='H' || cc=='L' || cc=='J' || ...
+       cc=='4' || cc=='8' || cc=='6' || cc=='2' % nudge point
   % check and see if there is a point to nudge, get it's value if
   % possible
   
@@ -208,11 +209,11 @@ elseif cc=='k' || cc=='h' || cc=='l' || cc=='j' || cc=='4' || ...
   
   % modify pt based on the 'nudge' value
   nudge=0.5; % 1/2 pixel nudge
-  if cc=='k' || cc=='8'
+  if cc=='k' || cc=='K' || cc=='8'
     pt(1,2)=pt(1,2)-nudge; % up
-  elseif cc=='h' || cc=='4'
+  elseif cc=='h' || cc=='H' || cc=='4'
     pt(1,1)=pt(1,1)-nudge; % left
-  elseif cc=='l' || cc=='6'
+  elseif cc=='l' || cc=='L' || cc=='6'
     pt(1,1)=pt(1,1)+nudge; % right
   else
     pt(1,2)=pt(1,2)+nudge; % down
@@ -298,7 +299,7 @@ elseif cc==' ' % space bar (digitize a point)
 
   return
   
-elseif cc=='q' % delete the current point
+elseif cc=='q' || cc=='Q' % delete the current point
 
   % create a simulated right-click
   event2=[];
@@ -307,7 +308,7 @@ elseif cc=='q' % delete the current point
   
   return
   
-elseif cc=='R' % recompute 3D locations
+elseif cc=='T' % recompute 3D locations
   disp('Recomputing all 3D coordinates.')
   [filename, pathname] = uigetfile('*.csv', 'Load new coefficients?');
   if isempty(filename)==false && filename~=0
@@ -363,7 +364,7 @@ elseif cc=='P' % remove current point from the data array
     end
   end
   
-elseif cc=='J' % bring up joiner interface
+elseif cc=='E' % bring up joiner interface
   ptList=[];
   ptSeq=(1:app.numpts);
   for i=1:numel(ptSeq)
@@ -426,7 +427,7 @@ elseif cc=='J' % bring up joiner interface
     disp('Point joining canceled.')
   end
   
-elseif cc=='S' % bring up swap interface
+elseif cc=='I' % bring up swap interface
   ptList=[];
   ptSeq=(1:app.numpts);
   for i=1:numel(ptSeq)
@@ -516,7 +517,7 @@ elseif cc=='Y' % bring up point splitter interface
     disp('Point splitting canceled.')
   end
   
-elseif cc=='C' % clear the image cache & cache index
+elseif cc=='W' % clear the image cache & cache index
   for i=1:numel(app.cdataCacheIdx)
     app.cdataCacheIdx{i}(:)=NaN;
   end
