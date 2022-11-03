@@ -42,19 +42,19 @@ active in the video and time-series windows:</p>
 <ul>
 	<li><p style="margin-bottom: 0in; line-height: 100%"><b>d</b>, <b>s</b>,
 	<b>D</b> and <b>S</b>: move (d)forward or (s)backward by 1 frame in
-	the video; D &amp; S move by 50 frames</p>
+	the video; D &amp; S move by "step" frames</p>
 
 	<li><p style="margin-bottom: 0in; line-height: 100%"><b>-</b>, <b>=</b>,
 	<b>r</b>: zoom in (-), zoom out (=) or (r)eset the video view</p>
 
-	<li><p style="margin-bottom: 0in; line-height: 100%"><b>space, q</b>:
+	<li><p style="margin-bottom: 0in; line-height: 100%"><b>space, q/Q</b>:
 	the space bar digitizes a point (equivalent to a mouse left-click)
 	and q deletes it (same as a mouse right click)</p>
 
-	<li><p style="margin-bottom: 0in; line-height: 100%"><b>k</b>, <b>h</b>,
-	<b>l</b>, <b>k</b> and <b>4</b>, <b>8</b>, <b>6</b>, <b>2</b>: nudge
+	<li><p style="margin-bottom: 0in; line-height: 100%"><b>k/K</b>, <b>h/H</b>,
+	<b>l/L</b>, <b>k/K</b> and <b>4</b>, <b>8</b>, <b>6</b>, <b>2</b>: nudge
 	the current point in the current video by 0.5 pixels in any of 4
-	directions using vim-like keys: right(h), down(j), up(k), and left(l).</p>
+	directions using vim-like keys: right(h/H), down(j/J), up(k/K), and left(l/L).</p>
 
 	<li><p style="margin-bottom: 0in; line-height: 100%"><b>z</b>, <b>x</b>, <b>c</b>, <b>v</b>, and <b>b</b>:
 	coorespond, in that order, to the track modes: off, auto-advance, semi-automatic, automatic, 
@@ -64,28 +64,33 @@ active in the video and time-series windows:</p>
 	creates a new point, (P) deletes the current point (with dialogue box
 	confirmation)</p>
 
-	<li><p style="margin-bottom: 0in; line-height: 100%"><b>m</b> and <b>n</b>:
+	<li><p style="margin-bottom: 0in; line-height: 100%"><b>m/M</b> and <b>n/N</b>:
 	cycle the active point forward (m) and backward (n) through the list</p>
 
 	<li><p style="margin-bottom: 0in; line-height: 100%"><b>,</b> and
 	<b>.</b>: jump to the beginning (,) or end (.) of the digitized data in
 	the current point in the current video</p>
 
-	<li><p style="margin-bottom: 0in; line-height: 100%"><b>J</b>: merge
+	<li><p style="margin-bottom: 0in; line-height: 100%"><b>E</b>: merge
 	two points by combining their 2D data where they do not overlap,
 	averaging it where they do and then recomputing the 3D result if in
 	3D mode.</p>
+	
+	<li><p style="margin-bottom: 0in; line-height: 100%"><b>T</b>: recompute 3D locations</p>
 
 	<li><p style="margin-bottom: 0in; line-height: 100%"><b>Y</b>: move
 	the data from 1 point in 1 camera into a new 2<sup>nd</sup> point
 	over a specified frame range</p>
 
 	<li><p style="margin-bottom: 0in; line-height: 100%"><b>U</b>: undo
-	the last point Delete, Merge or Move (i.e. D, J, Y) operation or
+	the last point Delete, Merge or Move (i.e. P, O, Y) operation or
 	Neural Network application from the Neural Network application
 	manager interface.</p>
+	
+	<li><p style="margin-bottom: 0in; line-height: 100%"><b>I</b>: open the
+	swap point interface. To change the data from one point to annother.</p>
 
-	<li><p style="margin-bottom: 0in; line-height: 100%"><b>C</b>: clear
+	<li><p style="margin-bottom: 0in; line-height: 100%"><b>W</b>: clear
 	the cache of recently viewed images. DLTdv8 caches recently viewed
 	images in memory so they can be re-displayed rapidly. However,
 	sometimes during rapid frame advance in compressed files the wrong
